@@ -84,7 +84,7 @@ docker run -d --name php_sample \
 -d odenktools/php7.2-apache2:latest
 ```
 
-## Running Laravel 5.2 Inside Container
+## Running Laravel 5.7 Inside Container
 
 ```bash
 cat <<EOF > $(pwd)/config/000-default.conf

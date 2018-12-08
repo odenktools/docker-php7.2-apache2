@@ -4,7 +4,7 @@ Simple Docker PHP 5.6 + Apache/2.4.25 container.
 
 ## Inside Container
 
-* php5.6
+* php7.2
 * Apache/2.4.25
 * Git
 * bash
@@ -13,28 +13,28 @@ Simple Docker PHP 5.6 + Apache/2.4.25 container.
 
 ## PHP Modules
 
-* php5.6-gd
-* php5.6-mcrypt
-* php5.6-mbstring
-* php5.6-intl
-* php5.6-mysql
-* php5.6-zip
-* php5.6-json
-* php5.6-soap
-* php5.6-xml
-* php5.6-bcmath
-* php5.6-mysqli
+* php7.2-gd
+* php7.2-mcrypt
+* php7.2-mbstring
+* php7.2-intl
+* php7.2-mysql
+* php7.2-zip
+* php7.2-json
+* php7.2-soap
+* php7.2-xml
+* php7.2-bcmath
+* php7.2-mysqli
 
 ## Build Container
 
 ```bash
-docker build --tag odenktools/php5.6-apache2:1.0.0 .
+docker build --tag odenktools/php7.2-apache2:1.0.0 .
 
-docker tag odenktools/php5.6-apache2:1.0.0 odenktools/php5.6-apache2:latest
+docker tag odenktools/php7.2-apache2:1.0.0 odenktools/php7.2-apache2:latest
 
-docker push odenktools/php5.6-apache2:1.0.0
+docker push odenktools/php7.2-apache2:1.0.0
 
-docker push odenktools/php5.6-apache2:latest
+docker push odenktools/php7.2-apache2:latest
 ```
 
 ## How to use
@@ -49,7 +49,7 @@ Simple running.
 docker run -d --name php_sample \
 --net=odenktools-net \
 --publish 80:80 \
--d odenktools/php5.6-apache2:latest
+-d odenktools/php7.2-apache2:latest
 ```
 
 Linking with another container.
@@ -59,7 +59,7 @@ docker run -d --name php_sample \
 --net=odenktools-net \
 --publish 80:80 \
 --link mysql:mysql \
--d odenktools/php5.6-apache2:latest
+-d odenktools/php7.2-apache2:latest
 ```
 
 Linking with another container + mount existing code.
@@ -72,7 +72,7 @@ docker run -d --name php_sample \
 --publish 80:80 \
 --link mysql:mysql \
 --mount type=bind,source=/d/git/php-script,target=/var/www \
--d odenktools/php5.6-apache2:latest
+-d odenktools/php7.2-apache2:latest
 ```
 
 ```bash
@@ -81,7 +81,7 @@ docker run -d --name php_sample \
 --publish 80:80 \
 --link mysql:mysql \
 --mount type=bind,source=/var/www/php-script,target=/var/www \
--d odenktools/php5.6-apache2:latest
+-d odenktools/php7.2-apache2:latest
 ```
 
 ## Running Laravel 5.2 Inside Container
@@ -104,5 +104,5 @@ docker run -d --name laravel \
 --publish 80:80 \
 --mount type=bind,source=/var/www/laravel.5-2,target=/var/www/html \
 -v ./config:/etc/apache2/sites-available \
-odenktools/docker-php-apache2:latest
+odenktools/php7.2-apache2:latest
 ```

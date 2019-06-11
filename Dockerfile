@@ -26,6 +26,7 @@ RUN apt-get -y update \
     libz-dev \
     libjpeg-dev \
     libpng-dev \
+    libgmp-dev \
     libfreetype6-dev \
     libxml2-dev \
     zlib1g-dev libicu-dev \
@@ -64,7 +65,8 @@ RUN docker-php-ext-install pdo pdo_mysql \
     && docker-php-ext-install soap \
     && docker-php-ext-install xml \
     && docker-php-ext-install bcmath \
-	&& docker-php-ext-install xsl \
+    && docker-php-ext-install xsl \
+    && docker-php-ext-install gmp \
     && apt-get clean \
     && rm -r /var/lib/apt/lists/*
 

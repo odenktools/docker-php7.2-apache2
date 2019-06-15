@@ -1,6 +1,6 @@
 # Docker PHP Apache2
 
-Simple Docker PHP 5.6 + Apache/2.4.25 container.
+Simple Docker PHP 7.2 + Apache/2.4.25 container.
 
 ## Inside Container
 
@@ -9,6 +9,13 @@ Simple Docker PHP 5.6 + Apache/2.4.25 container.
 * Git
 * bash
 * nano
+* curl
+* unzip
+* mysql-client
+* build-essential
+* g++
+* composer 1.7.3
+
 
 
 ## PHP Modules
@@ -84,7 +91,7 @@ docker run -d --name php_sample \
 -d odenktools/php7.2-apache2:latest
 ```
 
-## Running Laravel 5.7 Inside Container
+## Running Laravel 5.8 Inside Container
 
 ```bash
 cat <<EOF > $(pwd)/config/000-default.conf

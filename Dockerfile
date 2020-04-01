@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.2.18-apache
 
 MAINTAINER Odenktools <odenktools86@gmail.com>
 
@@ -53,6 +53,7 @@ RUN docker-php-ext-install gd && \
 
 RUN docker-php-ext-install pdo pdo_mysql \
     && pecl install mcrypt-1.0.1 \
+    && pecl install xdebug \
     && docker-php-ext-install mbstring \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
@@ -78,6 +79,11 @@ RUN { \
     echo 'post_max_size=1024M'; \
     echo 'memory_limit=-1'; \
     echo 'date.timezone=$TZ'; \
+    echo 'xdebug.remote_enable=on'; \
+    echo 'xdebug.remote_autostart=1'; \
+    echo 'xdebug.remote_port=9001'; \
+    echo 'xdebug.remote_handler=dbgp'; \
+    echo 'xdebug.remote_connect_back=0'; \
   } > /usr/local/etc/php/php.ini
 
 RUN docker-php-ext-enable intl \
@@ -94,11 +100,36 @@ RUN docker-php-ext-enable intl \
     && docker-php-ext-enable json \
     && docker-php-ext-enable xml \
     && docker-php-ext-enable xsl \
-    && docker-php-ext-enable bcmath
+    && docker-php-ext-enable xdebug \
+    && docker-php-ext-install sockets \
+    && docker-php-ext-enable bcmath 
+
+ARG INSTALL_AMQP=false
+
+RUN if [ ${INSTALL_AMQP} = true ]; then \
+    # download and install manually, to make sure it's compatible with ampq installed by pecl later
+    # install cmake first
+    apt-get update && \
+    apt-get -y install cmake && \
+    curl -L -o /tmp/rabbitmq-c.tar.gz https://github.com/alanxz/rabbitmq-c/archive/master.tar.gz && \
+    mkdir -p rabbitmq-c && \
+    tar -C rabbitmq-c -zxvf /tmp/rabbitmq-c.tar.gz --strip 1 && \
+    cd rabbitmq-c/ && \
+    mkdir _build && cd _build/ && \
+    cmake .. && \
+    cmake --build . --target install && \
+    # Install the amqp extension
+    pecl install amqp && \
+    docker-php-ext-enable amqp \
+;fi
 
 RUN curl -sSL https://getcomposer.org/download/1.7.3/composer.phar -o /usr/bin/composer \
-    && chmod +x /usr/bin/composer \
-    && apt-get update && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && chmod +x /usr/bin/composer
+
+# CLEAN PACKAGES
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    rm /var/log/lastlog /var/log/faillog
 
 RUN mkdir -p /var/www/html && mkdir -p /etc/apache2/ssl
 
@@ -129,7 +160,7 @@ VOLUME ["/var/www/html", "/var/log/apache2", "/etc/apache2/sites-available"]
 
 WORKDIR /var/www/html
 
-EXPOSE 80 443
+EXPOSE 80 443 9001
 
 CMD ["apache2-foreground"]
 

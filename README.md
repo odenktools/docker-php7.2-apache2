@@ -35,11 +35,11 @@ Simple Docker PHP 7.2 + Apache/2.4.25 container.
 ## Build Container
 
 ```bash
-docker build --tag odenktools/php7.2-apache2:1.0.0 .
+docker build --build-arg INSTALL_AMQP=true --tag odenktools/php7.2-apache2:1.1.0 .
 
-docker tag odenktools/php7.2-apache2:1.0.0 odenktools/php7.2-apache2:latest
+docker tag odenktools/php7.2-apache2:1.1.0 odenktools/php7.2-apache2:latest
 
-docker push odenktools/php7.2-apache2:1.0.0
+docker push odenktools/php7.2-apache2:1.1.0
 
 docker push odenktools/php7.2-apache2:latest
 ```
@@ -78,7 +78,7 @@ docker run -d --name php_sample \
 --net=odenktools-net \
 --publish 80:80 \
 --link mysql:mysql \
---mount type=bind,source=/d/git/php-script,target=/var/www \
+--mount type=bind,source=/d/git/php-script,target=/var/www/html \
 -d odenktools/php7.2-apache2:latest
 ```
 
@@ -87,7 +87,7 @@ docker run -d --name php_sample \
 --net=odenktools-net \
 --publish 80:80 \
 --link mysql:mysql \
---mount type=bind,source=/var/www/php-script,target=/var/www \
+--mount type=bind,source=/var/www/php-script,target=/var/www/html \
 -d odenktools/php7.2-apache2:latest
 ```
 
@@ -109,7 +109,7 @@ docker run -d --name laravel \
 --net=odenktools-net \
 --link mysql:mysql \
 --publish 80:80 \
---mount type=bind,source=/var/www/laravel.5-2,target=/var/www/html \
+--mount type=bind,source=/var/www/laravel.5-8,target=/var/www/html \
 -v ./config:/etc/apache2/sites-available \
 odenktools/php7.2-apache2:latest
 ```
